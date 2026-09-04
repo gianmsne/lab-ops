@@ -28,9 +28,11 @@ def main():
     while True:
         events = sense.stick.get_events()
 
+            
         for event in events:
+            if event.action == "held":
+                    print(f"Joystick {event.direction} was held!")
             if event.action == "pressed":
-                print("pressed")
  
                 if event.direction == "left":
                     print("left")
