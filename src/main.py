@@ -1,55 +1,45 @@
 from sense_hat import SenseHat
+from utils.matrix import blank, success, reject
+from utils.ssh_handler import ssh
 import time
 
 sense = SenseHat()
 
-
-def blank():
-
-        W = (255,255,255) # white
-
-        blank = [
-        W, W, W, W, W, W, W, W,
-        W, W, W, W, W, W, W, W,
-        W, W, W, W, W, W, W, W,
-        W, W, W, W, W, W, W, W,
-        W, W, W, W, W, W, W, W,
-        W, W, W, W, W, W, W, W,
-        W, W, W, W, W, W, W, W,
-        W, W, W, W, W, W, W, W,
-        ]
-        return blank
+HOLD_THRESHOLD = 3.0  # seconds
+press_times = {}  
+triggered = set() 
 
 def main():
-
     sense.low_light = True
     sense.set_pixels(blank())
 
+    press_start_time = None
+    action_triggered = False
+
     while True:
-        events = sense.stick.get_events()
+        for event in sense.stick.get_events():
+            # Start tracking when pressed
+            if event.action == 'pressed':
+                press_start_time = time.time()
+                action_triggered = False  # Reset flag for new press
+                
+            # Stop tracking if released early
+            elif event.action == 'released' and not action_triggered:
+                press_start_time = None
+                ssh()
+                sense.set_pixels(blank())
 
+        # Check if the button is currently being held
+        if press_start_time is not None and not action_triggered:
+            elapsed_time = time.time() - press_start_time
             
-        for event in events:
-            if event.action == "held":
-                    print(f"Joystick {event.direction} was held!")
-            if event.action == "pressed":
- 
-                if event.direction == "left":
-                    print("left")
+            # Send shutdown command
+            if elapsed_time >= 3.0:
+                print("Shutdown not implemented yet.")
+                sense.set_pixels(blank())
+                action_triggered = True 
 
-                elif event.direction == "right":
-                    print("right") 
-
-                elif event.direction == "middle":
-                    print("middle") 
-
-                elif event.direction == "up":
-                    print("up") 
-
-                elif event.direction == "down":
-                    print("down") 
-
-        time.sleep(0.01)
-
+        time.sleep(0.05)
+        
 if __name__ == "__main__":
     main()

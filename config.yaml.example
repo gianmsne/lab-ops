@@ -1,0 +1,14 @@
+# Rename this file to "config.yaml"
+
+hosts:
+  - id: 1
+    hostname: bobs-pc
+    user: bob
+    ip: 192.168.0.10
+    password: your-password-here
+
+  - id: 2
+    hostname: proxmox
+    user: root
+    ip: 192.168.0.20
+    password: your-password-here
