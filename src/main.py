@@ -3,13 +3,30 @@ import time
 
 sense = SenseHat()
 
+
+def blank(self):
+
+        W = (255,255,255) # white
+
+        blank = [
+        W, W, W, W, W, W, W, W,
+        W, W, W, W, W, W, W, W,
+        W, W, W, W, W, W, W, W,
+        W, W, W, W, W, W, W, W,
+        W, W, W, W, W, W, W, W,
+        W, W, W, W, W, W, W, W,
+        W, W, W, W, W, W, W, W,
+        W, W, W, W, W, W, W, W,
+        ]
+        return blank
+
 def main():
 
     sense.low_light = True
+    sense.set_pixels(blank())
 
     while True:
         events = sense.stick.get_events()
-        current_time = time.time()
 
         for event in events:
             if event.action == "pressed":
