@@ -4,7 +4,7 @@ import time
 sense = SenseHat()
 
 
-def blank(self):
+def blank():
 
         W = (255,255,255) # white
 
@@ -49,4 +49,5 @@ def main():
 
         time.sleep(0.01)
 
-main()
+if __name__ == "__main__":
+    main()
